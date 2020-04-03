@@ -1,6 +1,7 @@
 package com.niit.backend.service;
 
 import com.niit.backend.config.FileStorageProperties;
+import com.niit.backend.entities.FileResponse;
 import com.niit.backend.exception.FileNotFoundException;
 import com.niit.backend.exception.FileStorageException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
@@ -35,7 +37,7 @@ public class FileStorageService {
         }
     }
 
-    public String storeFile(MultipartFile file) {
+    public FileResponse storeFile(MultipartFile file) {
         // Normalize file name
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         try {
@@ -48,7 +50,12 @@ public class FileStorageService {
             Path targetLocation = this.fileStorageLocation.resolve(fileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
-            return fileName;
+            String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path("/api/uploadfile/")
+                    .path(fileName)
+                    .toUriString();
+
+            return new FileResponse(fileName, fileDownloadUri, file.getContentType(), file.getSize());
         } catch (IOException ex) {
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
         }

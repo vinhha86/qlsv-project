@@ -24,26 +24,26 @@ public class FileController {
     @Autowired
     private FileStorageService fileStorageService;
 
-    @PostMapping("/uploadFile")
-    public FileResponse uploadFile(@RequestParam("file") MultipartFile file) {
-
-        String fileName = fileStorageService.storeFile(file);
-
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/uploadfile/")
-                .path(fileName)
-                .toUriString();
-
-        return new FileResponse(fileName, fileDownloadUri, file.getContentType(), file.getSize());
-    }
-
-    @PostMapping("/uploadMultipleFiles")
-    public List<FileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
-        return Arrays.asList(files)
-                .stream()
-                .map(file -> uploadFile(file))
-                .collect(Collectors.toList());
-    }
+//    @PostMapping("/uploadFile")
+//    public FileResponse uploadFile(@RequestParam("file") MultipartFile file) {
+//
+//        String fileName = fileStorageService.storeFile(file);
+//
+//        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+//                .path("/api/uploadfile/")
+//                .path(fileName)
+//                .toUriString();
+//
+//        return new FileResponse(fileName, fileDownloadUri, file.getContentType(), file.getSize());
+//    }
+//
+//    @PostMapping("/uploadMultipleFiles")
+//    public List<FileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
+//        return Arrays.asList(files)
+//                .stream()
+//                .map(file -> uploadFile(file))
+//                .collect(Collectors.toList());
+//    }
 
     @GetMapping("/uploadfile/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
@@ -64,7 +64,7 @@ public class FileController {
         }
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
     }
 }

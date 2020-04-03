@@ -204,23 +204,25 @@
                     gioitinh: 1,
                     sdt_canhan: '',
                     sdt_phuhuynh: '',
-                    avatar_url: '',
                     address: {
                         chitiet: '',
                         province: {},
                         district: {},
                         ward: {}
                     }
-                }
+                },
+
+                avatar: {}
 
             }
         },
         methods: {
             onAvatarSelected(event) {
                 // file image uploaded
-                const image = event.target.files[0];
+                this.avatar = event.target.files[0];
+
                 const reader = new FileReader();
-                reader.readAsDataURL(image);
+                reader.readAsDataURL(this.avatar);
                 reader.onload = event =>{
                     this.previewImage = event.target.result;
                 };
@@ -255,13 +257,17 @@
                 this.student.address.ward = this.selectedWard;
             },
             submitStudentForm() {
+                const fd = new FormData();
+                fd.append('student', JSON.stringify(this.student));
+                fd.append('avatar', this.avatar);
+                // console.log(fd.get('avatar'));
                 axios({
                     method: 'post',
                     url: 'http://localhost:8080/api/student/add',
-                    data: this.student
+                    data: fd
                 })
                     .then(res =>{
-                        console.log(res.data);
+                        console.log(res);
                     }).catch(err => console.log(err));
 
             }
