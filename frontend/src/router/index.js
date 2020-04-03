@@ -25,7 +25,8 @@ const routes = [
     component: Student,
     children: [
       { path: '', component: StudentList },
-      { path: 'add', component: StudentForm }
+      { path: 'add', component: StudentForm },
+      { path: 'edit/:id', component: StudentForm }
     ]
   },
   {

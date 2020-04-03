@@ -31,7 +31,7 @@ public class Student {
     private String sdt_canhan;
     private String sdt_phuhuynh;
 
-    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "avatar")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private FileResponse avatar;

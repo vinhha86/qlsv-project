@@ -19,9 +19,11 @@
         >
             <div class="row">
                 <div class="col-sm-4 text-center">
-                    <img class="w-75 mb-4" :src="previewImage == null? require(`@/assets/placeholder.jpg`) : previewImage"/>
+                    <img class="w-75 mb-4"
+                         :src="previewImage == null? require(`@/assets/placeholder.jpg`) : previewImage"/>
                     <input type="file" class="d-none" ref="avatarInput" @change="onAvatarSelected"/>
-                    <button type="button" class="btn btn-primary" @click="$refs.avatarInput.click()"><i class="fa fa-upload"></i>&nbsp;
+                    <button type="button" class="btn btn-primary" @click="$refs.avatarInput.click()"><i
+                            class="fa fa-upload"></i>&nbsp;
                         Tải lên ảnh hồ sơ
                     </button>
                 </div>
@@ -71,27 +73,35 @@
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label>Tỉnh/Thành phố:</label>
-                                <select name="thanhpho" class="form-control" v-model="selectedProvice" @change="onSelectedProvince">
+                                <select name="thanhpho" class="form-control" v-model="selectedProvice"
+                                        @change="onSelectedProvince">
                                     <option :value="null" disabled>--Chọn tỉnh/thành phố--</option>
-                                    <option v-for="province in provinceList" :key="province.matp" :value="province">{{province.name}}</option>
+                                    <option v-for="province in provinceList" :key="province.matp" :value="province">
+                                        {{province.name}}
+                                    </option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label>Quận/Huyện:</label>
-                                <select name="quanhuyen" class="form-control" v-model="selectedDistrict" @change="onSelectedDistrict">
+                                <select name="quanhuyen" class="form-control" v-model="selectedDistrict"
+                                        @change="onSelectedDistrict">
                                     <option :value="null" disabled>--Chọn quận/huyện--</option>
-                                    <option v-for="district in districtList" :key="district.maqh" :value="district">{{district.name}}</option>
+                                    <option v-for="district in districtList" :key="district.maqh" :value="district">
+                                        {{district.name}}
+                                    </option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label>Xã/Phường:</label>
-                                <select name="xaphuong" class="form-control" v-model="selectedWard" @change="onSelectedWard">
+                                <select name="xaphuong" class="form-control" v-model="selectedWard"
+                                        @change="onSelectedWard">
                                     <option :value="null" disabled>--Chọn xã/phường--</option>
-                                    <option v-for="ward in wardList" :key="ward.xaid" :value="ward">{{ward.name}}</option>
+                                    <option v-for="ward in wardList" :key="ward.xaid" :value="ward">{{ward.name}}
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -124,11 +134,13 @@
                                 <label>Giới tính:</label>
                                 <div class="form-control pl-0 border-0">
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" value=1 v-model="student.gioitinh"/>
+                                        <input class="form-check-input" type="radio" value=1
+                                               v-model="student.gioitinh"/>
                                         <label class="form-check-label">Nam</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" value=0 v-model="student.gioitinh"/>
+                                        <input class="form-check-input" type="radio" value=0
+                                               v-model="student.gioitinh"/>
                                         <label class="form-check-label">Nữ</label>
                                     </div>
                                 </div>
@@ -165,7 +177,7 @@
                     <i class="fa fa-floppy-o"></i>
                     Lưu hồ sơ
                 </button>
-                <button type="reset" class="btn btn-danger">
+                <button type="button" @click="resetForm" class="btn btn-danger">
                     <i class="fa fa-refresh"></i>
                     Làm mới
                 </button>
@@ -179,13 +191,34 @@
 
     export default {
         created() {
+            if (this.studentId != null) {
+                axios.get('http://localhost:8080/api/student/detail', {params: {id: this.studentId}})
+                    .then(res => {
+                        this.student = res.data;
+                        if (res.data.avatar != null) {
+                            this.previewImage = res.data.avatar.fileDownloadUri;
+                        }
+
+                        this.selectedProvice = this.student.address.province;
+                        this.onSelectedProvince();
+                        this.selectedDistrict = this.student.address.district;
+                        this.onSelectedDistrict();
+                        this.selectedWard = this.student.address.ward;
+                        this.onSelectedWard();
+                        console.log(this.avatar);
+                    }).catch(err => console.log(err));
+            }
+
             axios.get('http://localhost:8080/api/address/province/all')
-                .then(res =>{
+                .then(res => {
                     this.provinceList = res.data;
                 }).catch(err => console.log(err));
         },
         data() {
             return {
+
+                studentId: this.$route.params.id,
+
                 provinceList: [],
                 districtList: [],
                 wardList: [],
@@ -212,7 +245,13 @@
                     }
                 },
 
-                avatar: {}
+                avatar: {
+                    id: null,
+                    fileDownloadUri: '',
+                    fileName: '',
+                    fileType: '',
+                    size: ''
+                }
 
             }
         },
@@ -223,7 +262,7 @@
 
                 const reader = new FileReader();
                 reader.readAsDataURL(this.avatar);
-                reader.onload = event =>{
+                reader.onload = event => {
                     this.previewImage = event.target.result;
                 };
             },
@@ -236,7 +275,7 @@
                         matp: this.selectedProvice.matp
                     }
                 })
-                    .then(res =>{
+                    .then(res => {
                         this.districtList = res.data;
                     }).catch(err => console.log(err));
             },
@@ -249,7 +288,7 @@
                         maqh: this.selectedDistrict.maqh
                     }
                 })
-                    .then(res =>{
+                    .then(res => {
                         this.wardList = res.data;
                     }).catch(err => console.log(err));
             },
@@ -260,16 +299,45 @@
                 const fd = new FormData();
                 fd.append('student', JSON.stringify(this.student));
                 fd.append('avatar', this.avatar);
-                // console.log(fd.get('avatar'));
                 axios({
                     method: 'post',
                     url: 'http://localhost:8080/api/student/add',
                     data: fd
                 })
-                    .then(res =>{
+                    .then(res => {
                         console.log(res);
                     }).catch(err => console.log(err));
 
+            },
+            resetForm() {
+                this.selectedProvice = null;
+                this.selectedDistrict = null;
+                this.selectedWard = null;
+                this.student = {
+                    ho: '',
+                    ten: '',
+                    masv: '',
+                    ngaysinh: '',
+                    socmt: '',
+                    email: '',
+                    gioitinh: 1,
+                    sdt_canhan: '',
+                    sdt_phuhuynh: '',
+                    address: {
+                        chitiet: '',
+                        province: {},
+                        district: {},
+                        ward: {}
+                    }
+                },
+
+                    this.avatar = {
+                        id: null,
+                        fileDownloadUri: '',
+                        fileName: '',
+                        fileType: '',
+                        size: ''
+                    }
             }
         },
     };

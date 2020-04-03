@@ -49,33 +49,11 @@
                         <td class="align-middle text-center">{{student.sdt_canhan}}</td>
                         <td class="align-middle text-center">{{student.address.province.name}}</td>
                         <td class="align-middle text-center">
-                            <button
-                                    type="button"
-                                    class="btn btn-outline-info"
-                                    data-toggle="tooltip"
-                                    data-placement="top"
-                                    title="Xem chi tiết"
-                            >
-                                <i class="fa fa-eye"></i>
-                            </button>&nbsp;
-                            <button
-                                    type="button"
-                                    class="btn btn-outline-primary"
-                                    data-toggle="tooltip"
-                                    data-placement="top"
-                                    title="Chỉnh sửa"
-                            >
-                                <i class="fa fa-pencil"></i>
-                            </button>&nbsp;
-                            <button
-                                    type="button"
-                                    class="btn btn-outline-danger"
-                                    data-toggle="tooltip"
-                                    data-placement="top"
-                                    title="Xóa hồ sơ"
-                            >
-                                <i class="fa fa-trash-o"></i>
-                            </button>&nbsp;
+                            <router-link tag="button" class="btn btn-outline-info" :to="'/student/edit/'+student.id"><i class="fa fa-eye"></i></router-link>
+                            &nbsp;
+                            <router-link tag="button" class="btn btn-outline-primary" :to="'/student/edit/'+student.id" ><i class="fa fa-pencil"></i></router-link>
+                            &nbsp;
+                            <router-link tag="button" class="btn btn-outline-danger" :to="'/student/edit/'+student.id"><i class="fa fa-trash-o"></i></router-link>
                         </td>
                     </tr>
                     </tbody>
@@ -124,15 +102,16 @@
     import moment from 'moment';
 
     export default {
-        created() {
+        mounted() {
             axios.get('http://localhost:8080/api/student/all')
                 .then(res => {
                     this.studentList = res.data;
+                    console.log(res.data);
                 }).catch(err => console.log(err));
         },
         data() {
             return {
-                studentList: []
+                studentList: [],
             };
         },
         methods: {
