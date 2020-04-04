@@ -24,4 +24,16 @@ export default {
   .form-control.is-invalid:focus {
     box-shadow: none;
   }
+  .page-link:focus {
+    box-shadow: none;
+  }
+  .btn.focus, .btn:focus {
+    box-shadow: none;
+  }
+  .btn-outline-primary.focus, .btn-outline-primary:focus {
+    box-shadow: none;
+  }
+  .btn-outline-secondary.focus, .btn-outline-secondary:focus {
+    box-shadow: none;
+  }
 </style>

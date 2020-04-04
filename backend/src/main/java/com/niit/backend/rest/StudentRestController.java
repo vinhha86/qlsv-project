@@ -7,6 +7,7 @@ import com.niit.backend.entities.Student;
 import com.niit.backend.service.FileStorageService;
 import com.niit.backend.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +28,23 @@ public class StudentRestController {
     @GetMapping("/all")
     public ResponseEntity<List<Student>> findAll() {
         return ResponseEntity.ok(studentService.findAll());
+    }
+
+    @GetMapping("/page")
+    public ResponseEntity<Page<Student>> findAllByPageAndLimit(
+            @RequestParam(value = "page", required = false) String page,
+            @RequestParam(value = "size", required = false) String size
+    ) {
+        return ResponseEntity.ok(studentService.pageStudent(page, size));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Page<Student>> searchStudent(
+            @RequestParam(value = "keyword") String keyword,
+            @RequestParam(value = "page", required = false) String page,
+            @RequestParam(value = "size", required = false) String size
+    ) {
+        return ResponseEntity.ok(studentService.searchStudent(keyword, page, size));
     }
 
     @GetMapping("/detail")

@@ -12,6 +12,7 @@ import java.util.List;
 
 @Repository
 public class AddressRepository {
+
     @Autowired
     private EntityManager entityManager;
 
