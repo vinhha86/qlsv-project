@@ -32,14 +32,22 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label>Họ/Tên đệm:</label>
-                                <input type="text" class="form-control" v-model="student.ho"/>
+                                <input type="text" class="form-control"
+                                       :class="{'is-invalid': $v.student.ho.$error}"
+                                       @blur="$v.student.ho.$touch()"
+                                       v-model="student.ho"/>
+                                <span class="invalid-feedback" v-if="!$v.student.ho.required">Họ/Tên đệm không được để trống</span>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label>Tên:</label>
                                 <div class="input-group">
-                                    <input class="form-control" v-model="student.ten"/>
+                                    <input class="form-control"
+                                           :class="{'is-invalid': $v.student.ten.$error}"
+                                           @blur="$v.student.ten.$touch()"
+                                           v-model="student.ten"/>
+                                    <span class="invalid-feedback" v-if="!$v.student.ten.required">Tên không được để trống</span>
                                 </div>
                             </div>
                         </div>
@@ -48,14 +56,22 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label>Mã học viên:</label>
-                                <input type="text" class="form-control" v-model="student.masv"/>
+                                <input type="text" class="form-control"
+                                       :class="{'is-invalid': $v.student.masv.$error}"
+                                       @blur="$v.student.masv.$touch()"
+                                       v-model="student.masv"/>
+                                <span class="invalid-feedback" v-if="!$v.student.masv.required">Mã học viên không được để trống</span>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label>Ngày sinh:</label>
                                 <div class="input-group">
-                                    <input class="form-control" v-model="student.ngaysinh"/>
+                                    <input class="form-control"
+                                           :class="{'is-invalid': $v.student.ngaysinh.$error}"
+                                           @blur="$v.student.ngaysinh.$touch()"
+                                           v-model="student.ngaysinh"/>
+                                    <span class="invalid-feedback" v-if="!$v.student.ngaysinh.required">Ngày sinh không được để trống</span>
                                 </div>
                             </div>
                         </div>
@@ -65,7 +81,6 @@
                         <input
                                 type="text"
                                 class="form-control"
-                                required="required"
                                 v-model="student.address.chitiet"
                         />
                     </div>
@@ -73,36 +88,49 @@
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label>Tỉnh/Thành phố:</label>
-                                <select name="thanhpho" class="form-control" v-model="selectedProvice"
+                                <select name="thanhpho" class="form-control"
+                                        :class="{'is-invalid': $v.selectedProvice.$error}"
+                                        @blur="$v.selectedProvice.$touch()"
+                                        v-model="selectedProvice"
                                         @change="onSelectedProvince">
                                     <option :value="null" disabled>--Chọn tỉnh/thành phố--</option>
                                     <option v-for="province in provinceList" :key="province.matp" :value="province">
                                         {{province.name}}
                                     </option>
                                 </select>
+                                <span class="invalid-feedback" v-if="!$v.selectedProvice.required">Chưa lựa chọn tỉnh/thành phố</span>
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label>Quận/Huyện:</label>
-                                <select name="quanhuyen" class="form-control" v-model="selectedDistrict"
+                                <select name="quanhuyen" class="form-control"
+                                        :class="{'is-invalid': $v.selectedDistrict.$error}"
+                                        @blur="$v.selectedDistrict.$touch()"
+                                        v-model="selectedDistrict"
                                         @change="onSelectedDistrict">
                                     <option :value="null" disabled>--Chọn quận/huyện--</option>
                                     <option v-for="district in districtList" :key="district.maqh" :value="district">
                                         {{district.name}}
                                     </option>
                                 </select>
+                                <span class="invalid-feedback" v-if="!$v.selectedDistrict.required">Chưa lựa chọn quận/huyện</span>
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label>Xã/Phường:</label>
-                                <select name="xaphuong" class="form-control" v-model="selectedWard"
+                                <select name="xaphuong" class="form-control"
+                                        :class="{'is-invalid': $v.selectedWard.$error}"
+                                        @blur="$v.selectedWard.$touch()"
+                                        v-model="selectedWard"
                                         @change="onSelectedWard">
                                     <option :value="null" disabled>--Chọn xã/phường--</option>
                                     <option v-for="ward in wardList" :key="ward.xaid" :value="ward">{{ward.name}}
                                     </option>
                                 </select>
+                                <span class="invalid-feedback"
+                                      v-if="!$v.selectedWard.required">Chưa lựa chọn xã/phường</span>
                             </div>
                         </div>
                     </div>
@@ -111,22 +139,25 @@
                             <div class="form-group">
                                 <label>Số CMTND:</label>
                                 <input
-                                        type="text"
-                                        class="form-control"
-                                        required="required"
+                                        type="text" class="form-control"
+                                        :class="{'is-invalid': $v.student.socmt.$error}"
+                                        @blur="$v.student.socmt.$touch()"
                                         v-model="student.socmt"
                                 />
+                                <span class="invalid-feedback" v-if="!$v.student.email.required">Số CMT không được để trống</span>
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label>Email:</label>
                                 <input
-                                        type="text"
-                                        class="form-control"
-                                        required="required"
+                                        type="email" class="form-control"
+                                        :class="{'is-invalid': $v.student.email.$error}"
+                                        @blur="$v.student.email.$touch()"
                                         v-model="student.email"
                                 />
+                                <span class="invalid-feedback" v-if="!$v.student.email.required">Email không được để trống</span>
+                                <span class="invalid-feedback" v-if="!$v.student.email.email">Email sai định dạng</span>
                             </div>
                         </div>
                         <div class="col-lg-4">
@@ -152,28 +183,33 @@
                             <div class="form-group">
                                 <label>Số điện thoại cá nhân:</label>
                                 <input
-                                        type="text"
-                                        class="form-control"
-                                        required="required"
+                                        type="text" class="form-control"
+                                        :class="{'is-invalid': $v.student.sdt_canhan.$error}"
+                                        @blur="$v.student.sdt_canhan.$touch()"
                                         v-model="student.sdt_canhan"
                                 />
+                                <span class="invalid-feedback" v-if="!$v.student.sdt_canhan.required">
+                                    Số điện thoại cá nhân không được để trống
+                                </span>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label>Số điện thoại phụ huynh:</label>
                                 <input
-                                        type="text"
-                                        class="form-control"
+                                        type="text" class="form-control"
+                                        :class="{'is-invalid': $v.student.sdt_phuhuynh.$error}"
+                                        @blur="$v.student.sdt_phuhuynh.$touch()"
                                         v-model="student.sdt_phuhuynh"
                                 />
+                                <span class="invalid-feedback" v-if="!$v.student.sdt_phuhuynh.required">Số điện thoại phụ huynh không được để trống</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row justify-content-center border-top p-2">
-                <button type="button" class="btn btn-success mr-2" @click="submitStudentForm">
+                <button type="button" class="btn btn-success mr-2" :disabled="$v.$invalid" @click="submitStudentForm">
                     <i class="fa fa-floppy-o"></i>
                     Lưu hồ sơ
                 </button>
@@ -187,6 +223,7 @@
 </template>
 
 <script>
+    import {required, email} from 'vuelidate/lib/validators';
     import axios from 'axios';
 
     export default {
@@ -205,10 +242,8 @@
                         this.onSelectedDistrict();
                         this.selectedWard = this.student.address.ward;
                         this.onSelectedWard();
-                        console.log(this.avatar);
                     }).catch(err => console.log(err));
             }
-
             axios.get('http://localhost:8080/api/address/province/all')
                 .then(res => {
                     this.provinceList = res.data;
@@ -216,7 +251,6 @@
         },
         data() {
             return {
-
                 studentId: this.$route.params.id,
 
                 provinceList: [],
@@ -253,6 +287,27 @@
                     size: ''
                 }
 
+            }
+        },
+        validations: {
+            selectedProvice: {required},
+            selectedDistrict: {required},
+            selectedWard: {required},
+            student: {
+                ho: {required},
+                ten: {required},
+                masv: {required},
+                ngaysinh: {required},
+                socmt: {required},
+                email: {required, email},
+                gioitinh: 1,
+                sdt_canhan: {required},
+                sdt_phuhuynh: {required},
+                address: {
+                    province: {required},
+                    district: {required},
+                    ward: {required}
+                }
             }
         },
         methods: {
@@ -343,4 +398,5 @@
     };
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>

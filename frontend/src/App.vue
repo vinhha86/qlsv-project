@@ -18,4 +18,10 @@ export default {
 </script>
 
 <style>
+  .form-control:focus {
+    box-shadow: none;
+  }
+  .form-control.is-invalid:focus {
+    box-shadow: none;
+  }
 </style>

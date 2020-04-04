@@ -53,7 +53,9 @@
                             &nbsp;
                             <router-link tag="button" class="btn btn-outline-primary" :to="'/student/edit/'+student.id" ><i class="fa fa-pencil"></i></router-link>
                             &nbsp;
-                            <router-link tag="button" class="btn btn-outline-danger" :to="'/student/edit/'+student.id"><i class="fa fa-trash-o"></i></router-link>
+                            <button class="btn btn-outline-danger" v-on:click="deleteStudent(student.id)">
+                                <i class="fa fa-trash-o"></i>
+                            </button>
                         </td>
                     </tr>
                     </tbody>
@@ -103,11 +105,7 @@
 
     export default {
         mounted() {
-            axios.get('http://localhost:8080/api/student/all')
-                .then(res => {
-                    this.studentList = res.data;
-                    console.log(res.data);
-                }).catch(err => console.log(err));
+            this.loadData();
         },
         data() {
             return {
@@ -115,8 +113,19 @@
             };
         },
         methods: {
+            loadData() {
+                axios.get('http://localhost:8080/api/student/all')
+                    .then(res => {
+                        this.studentList = res.data;
+                    }).catch(err => console.log(err));
+            },
             formatDate(date) {
                 return moment(date).format('DD/MM/YYYY');
+            },
+            deleteStudent(id) {
+                axios.delete('http://localhost:8080/api/student/delete', {params: {id: id}}).then(res => {
+                    if (res.status == 200) {this.loadData()}
+                });
             }
         }
     };

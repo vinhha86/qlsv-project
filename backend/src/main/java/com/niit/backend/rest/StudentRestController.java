@@ -64,20 +64,4 @@ public class StudentRestController {
         }
     }
 
-    @PutMapping("edit")
-    public ResponseEntity<Student> edit(@RequestParam("student") String student, @RequestParam(value = "avatar", required = false) MultipartFile avatar) {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            Student editStudent = mapper.readValue(student, Student.class);
-
-            if (avatar != null) {
-                FileResponse studentAvatar = fileStorageService.storeFile(avatar);
-                editStudent.setAvatar(studentAvatar);
-            }
-            return ResponseEntity.ok(studentService.save(editStudent));
-        } catch (JsonProcessingException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    }
-
 }
