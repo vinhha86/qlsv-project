@@ -1,12 +1,12 @@
 <template>
-    <div>
-        <div class="row mb-2">
+    <div class="row">
+        <div class="col-sm-12 mb-2">
             <router-link class="btn btn-primary" tag="button" active-class="active" to="/student/add" exact>
                 <i class="fa fa-plus"></i>&nbsp;Thêm mới hồ sơ
             </router-link>
         </div>
-        <div>
-            <div class="row justify-content-between mb-2">
+        <div class="col-sm-12">
+            <div class="d-flex justify-content-between mb-2">
                 <div class="input-group col-sm-3 p-0">
                     <div class="input-group-prepend">
                         <label class="input-group-text">Số bản ghi:</label>
@@ -18,18 +18,14 @@
                     </select>
                 </div>
                 <div class="input-group col-sm-3 p-0">
-                    <input type="text" v-model="keyword" @input="searchStudent" class="form-control" placeholder="Tìm kiếm..."/>
-<!--                    <div class="input-group-append">-->
-<!--                        <button class="btn btn-outline-secondary" type="button" @click="searchStudent">-->
-<!--                            <i class="fa fa-search"></i>-->
-<!--                        </button>-->
-<!--                    </div>-->
+                    <input type="text" v-model="keyword" @input="searchStudent" class="form-control"
+                           placeholder="Tìm kiếm..."/>
                 </div>
             </div>
             <div v-if="studentList.length > 0">
-                <div  class="row">
+                <div class="">
                     <table class="table table-bordered">
-                        <thead class="thead-dark">
+                        <thead>
                         <tr>
                             <td class="text-center" scope="col" style="width: 2%">STT</td>
                             <td class="text-center" scope="col">Mã SV</td>
@@ -49,9 +45,12 @@
                             <td class="align-middle text-center">{{student.sdt_canhan}}</td>
                             <td class="align-middle text-center">{{student.address.province.name}}</td>
                             <td class="align-middle text-center">
-                                <router-link tag="button" class="btn btn-outline-info" :to="'/student/edit/'+student.id"><i class="fa fa-eye"></i></router-link>
+                                <router-link tag="button" class="btn btn-outline-info"
+                                             :to="'/student/edit/'+student.id"><i class="fa fa-eye"></i></router-link>
                                 &nbsp;
-                                <router-link tag="button" class="btn btn-outline-primary" :to="'/student/edit/'+student.id" ><i class="fa fa-pencil"></i></router-link>
+                                <router-link tag="button" class="btn btn-outline-primary"
+                                             :to="'/student/edit/'+student.id"><i class="fa fa-pencil"></i>
+                                </router-link>
                                 &nbsp;
                                 <button class="btn btn-outline-danger" v-on:click="deleteStudent(student.id)">
                                     <i class="fa fa-trash-o"></i>
@@ -79,7 +78,8 @@
                 </div>
             </div>
             <div v-else>
-                <h3 class="text-center p-5 w-100" style="background-color: #eee">Không tìm thấy hồ sơ sinh viên nào !</h3>
+                <h3 class="text-center p-5 w-100" style="background-color: #eee">Không tìm thấy hồ sơ sinh viên nào
+                    !</h3>
             </div>
         </div>
 
@@ -97,7 +97,7 @@
             this.initData();
         },
         components: {
-          'paginate': Paginate
+            'paginate': Paginate
         },
         data() {
             return {
@@ -117,8 +117,9 @@
             },
             loadData(pageNum) {
                 axios.get('http://localhost:8080/api/student/page',
-                    {params : {
-                            page: pageNum-1,
+                    {
+                        params: {
+                            page: pageNum - 1,
                             size: this.size
                         }
                     })
@@ -128,11 +129,13 @@
             },
             searchStudent() {
                 axios.get('http://localhost:8080/api/student/search',
-                    {params: {
-                        keyword: this.keyword,
-                        size: this.size,
-                    }}
-                    )
+                    {
+                        params: {
+                            keyword: this.keyword,
+                            size: this.size,
+                        }
+                    }
+                )
                     .then(res => {
                         this.studentList = res.data.content;
                         this.totalPages = res.data.totalPages;
@@ -144,7 +147,9 @@
             },
             deleteStudent(id) {
                 axios.delete('http://localhost:8080/api/student/delete', {params: {id: id}}).then(res => {
-                    if (res.status == 200) {this.loadData()}
+                    if (res.status == 200) {
+                        this.initData()
+                    }
                 });
             }
         }

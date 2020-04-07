@@ -68,6 +68,7 @@
                                 <label>Ngày sinh:</label>
                                 <div class="input-group">
                                     <input class="form-control"
+                                           placeholder="DD/MM/YYYY"
                                            :class="{'is-invalid': $v.student.ngaysinh.$error}"
                                            @blur="$v.student.ngaysinh.$touch()"
                                            v-model="student.ngaysinh"/>
@@ -224,6 +225,7 @@
 
 <script>
     import {required, email} from 'vuelidate/lib/validators';
+    import moment from 'moment';
     import axios from 'axios';
 
     export default {
@@ -232,6 +234,8 @@
                 axios.get('http://localhost:8080/api/student/detail', {params: {id: this.studentId}})
                     .then(res => {
                         this.student = res.data;
+                        // this.student.ngaysinh = this.formatDate(this.student.ngaysinh, 'L');
+                        this.student.ngaysinh = this.formatDate(this.student.ngaysinh, 'DD/MM/YYYY');
                         if (res.data.avatar != null) {
                             this.previewImage = res.data.avatar.fileDownloadUri;
                         }
@@ -265,7 +269,7 @@
                     ho: '',
                     ten: '',
                     masv: '',
-                    ngaysinh: '',
+                    ngaysinh: null,
                     socmt: '',
                     email: '',
                     gioitinh: 1,
@@ -352,6 +356,10 @@
             },
             submitStudentForm() {
                 const fd = new FormData();
+                // moment(this.student.ngaysinh).format();
+                console.log(this.student.ngaysinh);
+                // this.student.ngaysinh = this.formatDate(this.student.ngaysinh, 'YYYY-DD-MM');
+                this.student.ngaysinh = moment(this.student.ngaysinh, ["DD/MM/YYYY", "YYYY-MM-DD"]).format();
                 fd.append('student', JSON.stringify(this.student));
                 fd.append('avatar', this.avatar);
                 axios({
@@ -360,7 +368,9 @@
                     data: fd
                 })
                     .then(res => {
-                        console.log(res);
+                        if (res.status == 200) {
+                            console.log(res);
+                        }
                     }).catch(err => console.log(err));
 
             },
@@ -393,7 +403,10 @@
                         fileType: '',
                         size: ''
                     }
-            }
+            },
+            formatDate(date, formatType) {
+                return moment(date).format(formatType);
+            },
         },
     };
 </script>

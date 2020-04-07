@@ -9,7 +9,7 @@ import StudentForm from "../views/student/StudentForm.vue";
 
 import Class from '../views/Class.vue'
 import Schedule from '../views/Schedule.vue'
-import Course from '../views/Course.vue'
+import Course from '../views/course/Course.vue'
 
 Vue.use(VueRouter)
 

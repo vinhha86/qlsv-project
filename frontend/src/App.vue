@@ -30,10 +30,12 @@ export default {
   .btn.focus, .btn:focus {
     box-shadow: none;
   }
-  .btn-outline-primary.focus, .btn-outline-primary:focus {
+  .btn-outline-primary.focus,
+  .btn-outline-primary:not(:disabled):not(.disabled).active:focus,
+  .btn-outline-primary:focus,
+  .btn-outline-secondary.focus,
+  .btn-outline-secondary:focus{
     box-shadow: none;
   }
-  .btn-outline-secondary.focus, .btn-outline-secondary:focus {
-    box-shadow: none;
-  }
+
 </style>

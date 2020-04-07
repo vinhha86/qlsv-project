@@ -55,7 +55,7 @@ public class StudentService {
     public Student save(Student student) {
         Student savedStudent = studentRepository.save(student);
         if (savedStudent != null) {
-            return student;
+            return savedStudent;
         }
         return null;
     }

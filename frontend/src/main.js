@@ -6,6 +6,8 @@ import Vuelidate from "vuelidate/src";
 Vue.config.productionTip = false
 Vue.use(Vuelidate);
 
+export const eventBus = new Vue();
+
 new Vue({
   router,
   render: h => h(App)
