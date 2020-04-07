@@ -1,14 +1,18 @@
 package com.niit.backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.niit.backend.entities.address.Address;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString.Exclude;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Collection;
 
 @Entity
 @Table(name = "hososinhvien")
@@ -39,4 +43,10 @@ public class Student {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "diachi")
     private Address address;
+    
+    @ManyToMany(mappedBy = "students")
+    @EqualsAndHashCode.Exclude
+    @Exclude
+    @JsonIgnore
+    private Collection<Class> classes;
 }
