@@ -4,6 +4,11 @@
 -- ------------------------------------------------------
 -- Server version	8.0.16
 
+drop database if exists qlsv;
+create database qlsv;
+use qlsv;
+
+
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
@@ -35,7 +40,7 @@ CREATE TABLE `address` (
   CONSTRAINT `fk_address_quanhuyen` FOREIGN KEY (`ma_huyen`) REFERENCES `quanhuyen` (`maqh`),
   CONSTRAINT `fk_address_tinhthanhpho` FOREIGN KEY (`ma_tinh`) REFERENCES `tinhthanhpho` (`matp`),
   CONSTRAINT `fk_address_xaphuong` FOREIGN KEY (`ma_xa`) REFERENCES `xaphuongthitran` (`xaid`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1 COLLATE=latin1_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1 COLLATE=latin1_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44,33 +49,35 @@ CREATE TABLE `address` (
 
 LOCK TABLES `address` WRITE;
 /*!40000 ALTER TABLE `address` DISABLE KEYS */;
-INSERT INTO `address` VALUES (1,'Số 5, ngõ 68, đường Trần Lãm','34','336','12454'),(2,'Thôn ABC','22','205','07117'),(3,'Thôn ABC','22','205','07117'),(4,'Thôn ABC','22','205','07117'),(5,'test','01','002','00040');
+INSERT INTO `address` VALUES (1,'Số 5, ngõ 68, đường Trần Lãm','34','336','12454'),(2,'Thôn ABC','22','205','07117'),(3,'Thôn ABC','22','205','07117'),(4,'Thôn ABC','22','205','07117'),(5,'test','01','002','00040'),(7,'test','08','072','02239'),(8,'test','19','172','05887'),(10,'test','27','256','09175'),(15,'Thôn ABC','22','205','07117');
 /*!40000 ALTER TABLE `address` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `district`
+-- Table structure for table `avatar`
 --
 
-DROP TABLE IF EXISTS `district`;
+DROP TABLE IF EXISTS `avatar`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
-CREATE TABLE `district` (
-  `maqh` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `matp` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`maqh`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+CREATE TABLE `avatar` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `size` bigint(20) DEFAULT NULL,
+  `file_download_uri` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `file_name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `file_type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `district`
+-- Dumping data for table `avatar`
 --
 
-LOCK TABLES `district` WRITE;
-/*!40000 ALTER TABLE `district` DISABLE KEYS */;
-/*!40000 ALTER TABLE `district` ENABLE KEYS */;
+LOCK TABLES `avatar` WRITE;
+/*!40000 ALTER TABLE `avatar` DISABLE KEYS */;
+INSERT INTO `avatar` VALUES (1,139480,'http://localhost:8080/api/uploadfile/teemo.jpg','teemo.jpg','image/jpeg'),(4,139480,'http://localhost:8080/api/uploadfile/teemo.jpg','teemo.jpg','image/jpeg'),(5,24133,'http://localhost:8080/api/uploadfile/Capture.JPG','Capture.JPG','image/jpeg'),(8,179116,'http://localhost:8080/api/uploadfile/linh.jpg','linh.jpg','image/jpeg');
+/*!40000 ALTER TABLE `avatar` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -92,11 +99,13 @@ CREATE TABLE `hososinhvien` (
   `gioitinh` int(1) DEFAULT NULL,
   `sdt_canhan` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
   `sdt_phuhuynh` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `avatar_url` varchar(250) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `avatar` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_hssv_address_idx` (`diachi`),
+  KEY `FK4y8bgh4xr00c5n52ylrnspnrf` (`avatar`),
+  CONSTRAINT `FK4y8bgh4xr00c5n52ylrnspnrf` FOREIGN KEY (`avatar`) REFERENCES `avatar` (`id`),
   CONSTRAINT `fk_hssv_address` FOREIGN KEY (`diachi`) REFERENCES `address` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -105,32 +114,63 @@ CREATE TABLE `hososinhvien` (
 
 LOCK TABLES `hososinhvien` WRITE;
 /*!40000 ALTER TABLE `hososinhvien` DISABLE KEYS */;
-INSERT INTO `hososinhvien` VALUES (1,'Hoàng Ngọc','Quý','00005091991','1991-09-04 17:00:00',1,'151829771','hoangquy591@gmail.com',1,'0834980362','0834980362',NULL),(3,'Ngô Diệu','Linh','TESTMHV','1996-11-06 17:00:00',2,'test','test@gmail.com',1,'test','test',''),(4,'Ngô Diệu','Linh','TESTMHV','1996-11-06 17:00:00',3,'test','test@gmail.com',1,'test','test',''),(5,'Ngô Diệu','Linh','TESTMHV','1996-11-06 17:00:00',4,'test','test@gmail.com',0,'test','test',''),(6,'test','test','test','1997-11-07 17:00:00',5,'test','test',1,'test','test','');
+INSERT INTO `hososinhvien` VALUES (10,'Hoàng Ngọc','Quý','test','1991-09-04 17:00:00',10,'151829771','hoangquy591@gmail.com',1,'test','test',5),(15,'Ngô Diệu','Linh','test','1996-11-06 17:00:00',15,'test','test@gmail.com',0,'test','test',8);
 /*!40000 ALTER TABLE `hososinhvien` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `province`
+-- Table structure for table `khoahoc`
 --
 
-DROP TABLE IF EXISTS `province`;
+DROP TABLE IF EXISTS `khoahoc`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
-CREATE TABLE `province` (
-  `matp` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`matp`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+CREATE TABLE `khoahoc` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `ma` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `ten` varchar(250) COLLATE utf8_unicode_ci NOT NULL,
+  `kieu` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `province`
+-- Dumping data for table `khoahoc`
 --
 
-LOCK TABLES `province` WRITE;
-/*!40000 ALTER TABLE `province` DISABLE KEYS */;
-/*!40000 ALTER TABLE `province` ENABLE KEYS */;
+LOCK TABLES `khoahoc` WRITE;
+/*!40000 ALTER TABLE `khoahoc` DISABLE KEYS */;
+/*!40000 ALTER TABLE `khoahoc` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `monhoc`
+--
+
+DROP TABLE IF EXISTS `monhoc`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `monhoc` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `ma` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `ten` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `so_buoi` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `sim` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `kit` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `ma_khoa_hoc` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_monhoc_khoahoc_idx` (`ma_khoa_hoc`),
+  CONSTRAINT `fk_monhoc_khoahoc` FOREIGN KEY (`ma_khoa_hoc`) REFERENCES `khoahoc` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `monhoc`
+--
+
+LOCK TABLES `monhoc` WRITE;
+/*!40000 ALTER TABLE `monhoc` DISABLE KEYS */;
+/*!40000 ALTER TABLE `monhoc` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -163,40 +203,6 @@ INSERT INTO `quanhuyen` VALUES ('001','Quận Ba Đình','Quận','01'),('002','
 UNLOCK TABLES;
 
 --
--- Table structure for table `student`
---
-
-DROP TABLE IF EXISTS `student`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `student` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `avatar_url` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `email` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `gioitinh` int(11) NOT NULL,
-  `ho` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `masv` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `ngaysinh` datetime DEFAULT NULL,
-  `sdt_canhan` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `sdt_phuhuynh` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `socmt` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `ten` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `diachi` bigint(20) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK1e9p8c02gov098p09e7rs72h4` (`diachi`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `student`
---
-
-LOCK TABLES `student` WRITE;
-/*!40000 ALTER TABLE `student` DISABLE KEYS */;
-/*!40000 ALTER TABLE `student` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `tinhthanhpho`
 --
 
@@ -220,31 +226,6 @@ LOCK TABLES `tinhthanhpho` WRITE;
 /*!40000 ALTER TABLE `tinhthanhpho` DISABLE KEYS */;
 INSERT INTO `tinhthanhpho` VALUES ('01','Thành phố Hà Nội','Thành phố Trung ương'),('02','Tỉnh Hà Giang','Tỉnh'),('04','Tỉnh Cao Bằng','Tỉnh'),('06','Tỉnh Bắc Kạn','Tỉnh'),('08','Tỉnh Tuyên Quang','Tỉnh'),('10','Tỉnh Lào Cai','Tỉnh'),('11','Tỉnh Điện Biên','Tỉnh'),('12','Tỉnh Lai Châu','Tỉnh'),('14','Tỉnh Sơn La','Tỉnh'),('15','Tỉnh Yên Bái','Tỉnh'),('17','Tỉnh Hoà Bình','Tỉnh'),('19','Tỉnh Thái Nguyên','Tỉnh'),('20','Tỉnh Lạng Sơn','Tỉnh'),('22','Tỉnh Quảng Ninh','Tỉnh'),('24','Tỉnh Bắc Giang','Tỉnh'),('25','Tỉnh Phú Thọ','Tỉnh'),('26','Tỉnh Vĩnh Phúc','Tỉnh'),('27','Tỉnh Bắc Ninh','Tỉnh'),('30','Tỉnh Hải Dương','Tỉnh'),('31','Thành phố Hải Phòng','Thành phố Trung ương'),('33','Tỉnh Hưng Yên','Tỉnh'),('34','Tỉnh Thái Bình','Tỉnh'),('35','Tỉnh Hà Nam','Tỉnh'),('36','Tỉnh Nam Định','Tỉnh'),('37','Tỉnh Ninh Bình','Tỉnh'),('38','Tỉnh Thanh Hóa','Tỉnh'),('40','Tỉnh Nghệ An','Tỉnh'),('42','Tỉnh Hà Tĩnh','Tỉnh'),('44','Tỉnh Quảng Bình','Tỉnh'),('45','Tỉnh Quảng Trị','Tỉnh'),('46','Tỉnh Thừa Thiên Huế','Tỉnh'),('48','Thành phố Đà Nẵng','Thành phố Trung ương'),('49','Tỉnh Quảng Nam','Tỉnh'),('51','Tỉnh Quảng Ngãi','Tỉnh'),('52','Tỉnh Bình Định','Tỉnh'),('54','Tỉnh Phú Yên','Tỉnh'),('56','Tỉnh Khánh Hòa','Tỉnh'),('58','Tỉnh Ninh Thuận','Tỉnh'),('60','Tỉnh Bình Thuận','Tỉnh'),('62','Tỉnh Kon Tum','Tỉnh'),('64','Tỉnh Gia Lai','Tỉnh'),('66','Tỉnh Đắk Lắk','Tỉnh'),('67','Tỉnh Đắk Nông','Tỉnh'),('68','Tỉnh Lâm Đồng','Tỉnh'),('70','Tỉnh Bình Phước','Tỉnh'),('72','Tỉnh Tây Ninh','Tỉnh'),('74','Tỉnh Bình Dương','Tỉnh'),('75','Tỉnh Đồng Nai','Tỉnh'),('77','Tỉnh Bà Rịa - Vũng Tàu','Tỉnh'),('79','Thành phố Hồ Chí Minh','Thành phố Trung ương'),('80','Tỉnh Long An','Tỉnh'),('82','Tỉnh Tiền Giang','Tỉnh'),('83','Tỉnh Bến Tre','Tỉnh'),('84','Tỉnh Trà Vinh','Tỉnh'),('86','Tỉnh Vĩnh Long','Tỉnh'),('87','Tỉnh Đồng Tháp','Tỉnh'),('89','Tỉnh An Giang','Tỉnh'),('91','Tỉnh Kiên Giang','Tỉnh'),('92','Thành phố Cần Thơ','Thành phố Trung ương'),('93','Tỉnh Hậu Giang','Tỉnh'),('94','Tỉnh Sóc Trăng','Tỉnh'),('95','Tỉnh Bạc Liêu','Tỉnh'),('96','Tỉnh Cà Mau','Tỉnh');
 /*!40000 ALTER TABLE `tinhthanhpho` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `ward`
---
-
-DROP TABLE IF EXISTS `ward`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `ward` (
-  `xaid` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `maqh` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`xaid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `ward`
---
-
-LOCK TABLES `ward` WRITE;
-/*!40000 ALTER TABLE `ward` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ward` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -285,4 +266,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-02 18:22:23
+-- Dump completed on 2020-04-05 10:02:14
